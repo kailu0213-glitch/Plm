@@ -5,6 +5,7 @@ import { Task, MoldTrial } from "../types";
 // 始終依照規範使用 process.env.API_KEY 初始化
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+// 使用 gemini-3-pro-preview 處理複雜的生產數據分析，識別技術瓶頸
 export const getAIInsights = async (tasks: Task[]) => {
   const prompt = `請分析以下「模具開發專案 (Mold Development)」的加工工序數據，並以「專業繁體中文」提供以下深度洞察：
   1. 加工瓶頸診斷：識別哪一項模具工序造成了生產線停滯。
@@ -19,7 +20,7 @@ export const getAIInsights = async (tasks: Task[]) => {
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-pro-preview",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -45,6 +46,7 @@ export const getAIInsights = async (tasks: Task[]) => {
   }
 };
 
+// 使用 gemini-3-pro-preview 提供專業試模缺陷技術建議
 export const getTrialImprovementAI = async (moldName: string, trial: MoldTrial) => {
   const prompt = `作為模具射出成型專家，請針對以下模具的試模狀況提供專業的改善建議：
   模具名稱：${moldName}
@@ -55,9 +57,8 @@ export const getTrialImprovementAI = async (moldName: string, trial: MoldTrial) 
   建議字數約 120 字左右，口吻專業且精確。請勿回覆 JSON，直接回覆純文字。`;
 
   try {
-    // 建立帶有超時控制的請求
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-pro-preview",
       contents: prompt,
     });
 
