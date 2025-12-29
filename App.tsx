@@ -85,6 +85,7 @@ const SidebarItem = memo(({ icon: Icon, label, active, onClick }: any) => (
 ));
 
 const ProgressBar = memo(({ progress, status }: { progress: number, status: TaskStatus }) => {
+  const statusKey = status as keyof typeof STATUS_COLORS;
   const bgColor = status === TaskStatus.DONE ? 'bg-emerald-500' : status === TaskStatus.DELAYED ? 'bg-rose-500' : status === TaskStatus.REVIEW ? 'bg-amber-500' : 'bg-indigo-500';
   return (
     <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
@@ -501,7 +502,7 @@ const App: React.FC = () => {
                             <td className="px-4 py-4"><div className="flex items-center gap-2 font-bold text-[11px]"><div className="w-5 h-5 rounded bg-slate-900 text-white flex items-center justify-center text-[9px]">{t.assignee.charAt(0)}</div>{t.assignee}</div></td>
                             <td className="px-4 py-4 text-center text-[10px] font-bold italic text-slate-500">{t.dueDate}</td>
                             <td className="px-4 py-4"><ProgressBar progress={t.progress} status={t.status} /></td>
-                            <td className="px-8 py-4 text-right"><span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase shadow-sm ${STATUS_COLORS[t.status]}`}>{TaskStatusLabels[t.status]}</span></td>
+                            <td className="px-8 py-4 text-right"><span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase shadow-sm ${STATUS_COLORS[t.status as keyof typeof STATUS_COLORS]}`}>{TaskStatusLabels[t.status]}</span></td>
                           </tr>
                         ))}
                       </tbody>
@@ -644,7 +645,7 @@ const App: React.FC = () => {
                 <InfoRow label="加工進度階段" icon={Layers} value={selectedTask.tags[0]} colorClass="text-indigo-600" />
                 <InfoRow label="啟動日期" icon={Calendar} value={selectedTask.startDate} />
                 <InfoRow label="截止預計日期" icon={CalendarDays} value={selectedTask.dueDate} colorClass={selectedTask.status === TaskStatus.DELAYED ? 'text-rose-600 font-black underline decoration-rose-300 decoration-2 underline-offset-4' : ''} />
-                <InfoRow label="當前狀態" icon={ShieldAlert} value={TaskStatusLabels[selectedTask.status]} colorClass={STATUS_COLORS[selectedTask.status]} />
+                <InfoRow label="當前狀態" icon={ShieldAlert} value={TaskStatusLabels[selectedTask.status]} colorClass={STATUS_COLORS[selectedTask.status as keyof typeof STATUS_COLORS]} />
                 <InfoRow label="通知設定" icon={Mail} value={selectedTask.status === TaskStatus.DELAYED ? '已觸發預警' : '監控中'} colorClass={selectedTask.status === TaskStatus.DELAYED ? 'text-rose-500' : 'text-slate-400'} />
               </div>
 
